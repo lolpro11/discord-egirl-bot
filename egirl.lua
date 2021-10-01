@@ -147,4 +147,4 @@ client:on('messageCreate', function(message)
 	end
 end)
 
-client:run(io.open("lolprobot files/egirl_token.txt"):read())
+client:run("Bot "..io.open("lolprobot files/egirl_token.txt"):read())
