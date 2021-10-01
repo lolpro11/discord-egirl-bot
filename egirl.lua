@@ -143,8 +143,15 @@ client:on('messageCreate', function(message)
 		local intent = str_intent(message.content)
 	end
 	if message.content or message.reply then
-		print("[CHAT]: #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id)
+		local textlog = io.open('lolprobot files/egirl_chat.log','a')
+		if message.channel.guild == nil then
+			print("[CHAT]: #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id)
+			textlog:write("[CHAT]: #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id, "\n")
+		else
+			print("[CHAT]: #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id)
+			textlog:write("[CHAT]: "..message.channel.guild.name.." #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id, "\n")
+		end
+		io.close(textlog)
 	end
 end)
-
 client:run("Bot "..io.open("lolprobot files/egirl_token.txt"):read())
