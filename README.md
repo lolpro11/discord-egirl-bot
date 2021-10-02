@@ -1,7 +1,7 @@
 # discord-egirl-bot
 
 ## Commands
-  For sound effects: {c, m, d, o, h, y, op, owo, uwu, why, hello}\n
+  For sound effects: {c, m, d, o, h, y, op, owo, uwu, why, hello}
   b
   k
   s
