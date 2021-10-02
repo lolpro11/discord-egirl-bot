@@ -148,7 +148,7 @@ client:on('messageCreate', function(message)
 			print("[CHAT]: #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id)
 			textlog:write("[CHAT]: #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id, "\n")
 		else
-			print("[CHAT]: #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id)
+			print("[CHAT]: "..message.channel.guild.name.." #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id)
 			textlog:write("[CHAT]: "..message.channel.guild.name.." #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id, "\n")
 		end
 		io.close(textlog)
