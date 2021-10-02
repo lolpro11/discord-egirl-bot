@@ -35,7 +35,7 @@ end
 
 client:on('messageCreate', function(message)
 	local prefix = '!'
-	local song_list = {"c", "m", "d", "o", "h", "y", "op", "owo", "uwu", "why"}
+	local song_list = {"c", "m", "d", "o", "h", "y", "op", "owo", "uwu", "why", "i"}
 	--if message.author.id == "873989176490623066" then
 		--return
 	--end
@@ -71,7 +71,7 @@ client:on('messageCreate', function(message)
 		message.channel:send("*cries in code*")
 	elseif message.content == "<@!856669192958902293> i love you ❤️" or message.content == "<@856669192958902293> i love you ❤️" then
 		player("gottem")
-		message.channel:send("I was only made <t:1624341451:R>!")
+		message.channel:send("I was only made <t:1624341451:R>!")--https://www.youtube.com/watch?v=d8QbGicJJXo
 	elseif message.content == prefix.."play hentai" then
 		player("hentai")
 	elseif message.content:sub(1,3) == prefix.."dm" then
