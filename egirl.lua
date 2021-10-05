@@ -35,7 +35,7 @@ end
 
 client:on('messageCreate', function(message)
 	local prefix = '!'
-	local song_list = {"c", "m", "d", "o", "h", "y", "op", "owo", "uwu", "why", "i"}
+	local song_list = {"c", "m", "d", "o", "h", "y", "op", "owo", "uwu", "why", "i", "hard"}
 	--if message.author.id == "873989176490623066" then
 		--return
 	--end
@@ -45,10 +45,11 @@ client:on('messageCreate', function(message)
 				local channel = client:getChannel(message.member.voiceChannel)
 				if channel ~= nil then
 					local connection = channel:join()
-					if connection ~= nil then
+					if connection == nil then
 						connection = channel:join()
+					else
+						connection:playFFmpeg('lolprobot files/egirl_msgs/'..song..'.mp3')
 					end
-					connection:playFFmpeg('lolprobot files/egirl_msgs/'..song..'.mp3')
 				end
 			end
 		end)()
@@ -87,13 +88,13 @@ client:on('messageCreate', function(message)
 				for i=3,#dm_id do
 					dm_message = dm_message.." "..dm_id[i]
 				end
-				if dm_message ~= nil then
-					client:getUser(dm_id[1]):send(dm_message)
+				local dm_get = client:getUser(dm_id[1])
+				if dm_message ~= nil and dm_get ~= nil then
+					dm_get:send(dm_message)
 				end
 			end
 		end
-		message.author:send(dm_message)
-		message.author:send("Sent dm to <@"..dm_id[1]..">")
+		message.author:send(dm_message.."\nSent dm to <@"..dm_id[1]..">")
 	elseif message.content:sub(1,3) == prefix.."sa" then
 		message:delete()
 		local _message = trim(message.content:sub(4,string.len(message.content)))
@@ -110,11 +111,11 @@ client:on('messageCreate', function(message)
 	elseif message.content == "Will you marry me?" then
 		message.channel:send("No Way.")
 	elseif message.content == "Sudo will you marry me?" then
-		local sudoers_file = {[701824288340180993] = true, [502999470611365893] = true}
+		local sudoers_file = {[701824288340180993] = true, [502999470611365893] = true, [491754643190185994] = true, [856669192958902293] = true}
 		if sudoers_file[tonumber(message.author.id)] == true then			
 			message.channel:send("https://cdn.discordapp.com/attachments/792555177794207765/881411852855291934/Screenshot_2021-08-28_223504_2.png")
 		else
-			message.channel:send("Error: User is not in Sudoer's file.\nThis incident will be reported.")
+			message.channel:send("```Error: User is not in Sudoer's file.\nThis incident will be reported.```")
 		end
 	elseif message.content:sub(1,1) == "'" then
 		local file_learn_str = trim(message.content:sub(2,string.len(message.content)))
