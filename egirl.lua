@@ -1,11 +1,10 @@
 local https = require('https')
 local discordia = require('discordia')
 local ffi = require("ffi")
-opus = ffi.load("opus")
-sodium = ffi.load("sodium")
+local opus = ffi.load("opus")
+local sodium = ffi.load("sodium")
 require('class')
 require('intent')
-local dobtlog = owo
 local client = discordia.Client {
 	--dateTime = "%Y-%m-%d T:%H:%M:%S",
 	logFile = "lolprobot files/egirl.log",
@@ -13,7 +12,6 @@ local client = discordia.Client {
 }
 discordia.extensions()
 client:on('ready', function()
-	-- client.user is the path for your bot
 	print('Logged in as '.. client.user.username)
 	client:setGame(io.open("lolprobot files/egirl_msgs/status.txt"):read())--Smashing DoorMat's dick
 end)
@@ -24,6 +22,14 @@ function trim(s)
 	end
 end
 
+--[[function Split(s, y)
+    result = {};
+    for match in (s..y):gmatch("(.-)"..y) do
+        table.insert(result, match);
+    end
+    return result;
+end--]]
+
 function split(s)
 	local chunks = {}
 	for substring in s:gmatch("%S+") do
@@ -33,9 +39,44 @@ function split(s)
 	return chunks
 end
 
+function make_sus()
+	msg_sus = {}
+	local ls = io.open("lolprobot files/egirl_msgs/list.txt"):read()
+	for i=1,ls do
+		local read_msg = io.open("lolprobot files/egirl_msgs/sus/"..i..".txt"):read()
+		msg_sus[#msg_sus + 1] = read_msg
+	end
+	print(table.concat(msg_sus, ","))
+end
+
+make_sus()
+
+function find_the_sussy(msg)
+	local other_str = {}
+	--print(table.concat(other_str, ","))
+	for i=1,#msg_sus do
+		if msg == msg_sus[i] then
+			print("100%")
+			return true
+		end
+	end
+	other_str = split(msg)
+	for i=1,#other_str do
+		for ii=1,#msg_sus do
+			if other_str[i] == msg_sus[ii] then
+				other_str = {}
+				collectgarbage()
+				print("sub str")
+				return true
+			end
+		end
+	end
+	return false
+end
+
 client:on('messageCreate', function(message)
 	local prefix = '!'
-	local song_list = {"c", "m", "d", "o", "h", "y", "op", "owo", "uwu", "why", "i", "hard"}
+	local song_list = {"c", "m", "d", "o", "h", "y", "op", "owo", "uwu", "why", "i", "hard", "hello", "pizza", "mask", "dive", "threat"}
 	--if message.author.id == "873989176490623066" then
 		--return
 	--end
@@ -70,6 +111,10 @@ client:on('messageCreate', function(message)
 	elseif message.content == "s" then
 		message:delete()
 		message.channel:send("*cries in code*")
+	elseif message.content == "client.destroy()" then
+		client:setStatus("offline")--(online, dnd, idle, offline)
+	elseif message.content == "client.revive()" then
+		client:setStatus("online")--(online, dnd, idle, offline)
 	elseif message.content == "<@!856669192958902293> i love you ❤️" or message.content == "<@856669192958902293> i love you ❤️" then
 		player("gottem")
 		message.channel:send("I was only made <t:1624341451:R>!")--https://www.youtube.com/watch?v=d8QbGicJJXo
@@ -117,7 +162,7 @@ client:on('messageCreate', function(message)
 		else
 			message.channel:send("```Error: User is not in Sudoer's file.\nThis incident will be reported.```")
 		end
-	elseif message.content:sub(1,1) == "'" then
+	--[[elseif message.content:sub(1,1) == "'" then
 		local file_learn_str = trim(message.content:sub(2,string.len(message.content)))
 		--"a1d0b100-a8b7-4ff0-96e4-90009c41c31f"
 		local num_list = io.open("lolprobot files/egirl_msgs/list.txt", "r")
@@ -129,19 +174,34 @@ client:on('messageCreate', function(message)
 		file_learn:write(file_learn_str)
 		file_learn:close()
 		num_list:close()
-		message.channel:send("String Logged.")
+		message.channel:send("String Logged.")]]--
+	elseif message.content:sub(1,1) == ";" then
+		message:delete()
+		local file_learn_str = trim(message.content:sub(2,string.len(message.content)))
+		--"a1d0b100-a8b7-4ff0-96e4-90009c41c31f"
+		local added = io.open("lolprobot files/egirl_msgs/list.txt", "r"):read()
+		local num_list = io.open("lolprobot files/egirl_msgs/list.txt", "w")
+		local file_learn = io.open("lolprobot files/egirl_msgs/sus/"..tostring(added + 1)..".txt", "w")
+		num_list:write(added + 1)
+		file_learn:write(file_learn_str)
+		file_learn:close()
+		num_list:close()
+		message.author:send("Sussy Logged.")
+		make_sus()
 	elseif message.content:sub(1,4) == "join" then
 		if message.member ~= nil then
 			local channel = client:getChannel(message.member.voiceChannel)
-			if channel ~= nil and connection ~= channel:join() then
+			if channel ~= nil and connection == nil then
 				connection = channel:join()
 			end
 		end
-	elseif message.content == "hello" then
-		message:delete()
-		player("hi")
 	else
-		local intent = str_intent(message.content)
+		local sus_now = false
+		if find_the_sussy(message.content) == true and sus_now == false then
+			sus_now = true
+			player("sus")
+			sus_now = false
+		end
 	end
 	if message.content or message.reply then
 		local textlog = io.open('lolprobot files/egirl_chat.log','a')
