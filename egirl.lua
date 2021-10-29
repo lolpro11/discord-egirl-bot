@@ -6,7 +6,6 @@ local sodium = ffi.load("sodium")
 require('class')
 require('intent')
 local client = discordia.Client {
-	--dateTime = "%Y-%m-%d T:%H:%M:%S",
 	logFile = "lolprobot files/egirl.log",
 	cacheAllMembers = true,
 }
