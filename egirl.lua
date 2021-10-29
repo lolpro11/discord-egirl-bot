@@ -206,11 +206,11 @@ client:on('messageCreate', function(message)
 	if message.content or message.reply then
 		local textlog = io.open('lolprobot files/egirl_chat.log','a')
 		if message.channel.guild == nil then
-			print("[CHAT]: #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id)
-			textlog:write("[CHAT]: #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id, "\n")
+			print("[CHAT]: #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id.." "..os.date('!%Y-%m-%d %H:%M:%S', message.createdAt))
+			textlog:write("[CHAT]: #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id.." "..os.date('!%Y-%m-%d %H:%M:%S', message.createdAt), "\n")
 		else
-			print("[CHAT]: "..message.channel.guild.name.." #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id)
-			textlog:write("[CHAT]: "..message.channel.guild.name.." #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id, "\n")
+			print("[CHAT]: "..message.channel.guild.name.." #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id.." "..os.date('!%Y-%m-%d %H:%M:%S', message.createdAt))
+			textlog:write("[CHAT]: "..message.channel.guild.name.." #"..message.channel.name.." "..message.content.." "..message.author.username.."#"..message.author.discriminator.." id:"..message.author.id.." "..os.date('!%Y-%m-%d %H:%M:%S', message.createdAt), "\n")
 		end
 		io.close(textlog)
 	end
