@@ -4,7 +4,7 @@
  * Go to https://discord.com/developers/applications and click "New Application"
  * Name it
  * Go to Bot and click "New Bot"
- * Once you created the bot, click "Copy token" and paste it into [lolprobot files/egirl_token.txt]
+ * Once you created the bot, click "Copy token" and paste it into [!uwu](lolprobot files/egirl_token.txt)
 ## Commands
   * For sound effects: {c, m, d, o, h, y, op, owo, uwu, why, hello}
   * b
