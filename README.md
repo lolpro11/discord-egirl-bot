@@ -1,4 +1,2 @@
 # discord-egirl-bot
-
-## Linux
- * This is a branch that supports linux
+ * This is a port  to Linux
