@@ -1,7 +1,7 @@
 local https = require('https')
 local discordia = require('discordia')
 local ffi = require("ffi")
-local opus = ffi.load("opus")
+local opus = ffi.load("opus-tools")
 local sodium = ffi.load("sodium")
 require('class')
 require('intent')
