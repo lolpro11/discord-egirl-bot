@@ -75,10 +75,10 @@ end
 
 client:on('messageCreate', function(message)
 	local prefix = '!'
-	local song_list = {"c", "m", "d", "o", "h", "y", "op", "owo", "uwu", "why", "i", "hard", "hello", "pizza", "mask", "dive", "threat", "dream"}
-	--if message.author.id == "873989176490623066" then
-		--return
-	--end
+	local song_list = {"c", "f", "m", "d", "o", "h", "y", "op", "owo", "uwu", "why", "i", "hard", "hello", "pizza", "mask", "dive", "threat", "dream"}
+	--[[if message.author.id == "502999470611365893" then
+		return
+	end]]--
 	function player(song)
 		coroutine.wrap(function()
 			if message.member ~= nil then
@@ -89,6 +89,9 @@ client:on('messageCreate', function(message)
 						connection = channel:join()
 					else
 						connection:playFFmpeg('lolprobot files/egirl_msgs/'..song..'.mp3')
+						if song == "f" and  type(connection) ~= "nil" then
+                            connection:close()
+                        end
 					end
 				end
 			end
@@ -103,6 +106,18 @@ client:on('messageCreate', function(message)
 	if message.content == "b" then
 		message:delete()
 		message.channel:send("*blushes*")
+	elseif message.content == "ftext" then
+		message:delete()
+		message.channel:broadcastTyping()
+    elseif message.content == "l" then
+        message:delete()
+        local channel = client:getChannel(message.member.voiceChannel)
+        if connection ~= nil then
+            connection = channel:join()
+            if type(connection) ~= "nil" then
+                connection:close()
+            end
+        end
 	elseif message.content == "k" then
 		message:delete()
 		message.channel:send("okie")
@@ -114,7 +129,7 @@ client:on('messageCreate', function(message)
 		client:setStatus("offline")--(online, dnd, idle, offline)
 	elseif message.content == "client.revive()" then
 		client:setStatus("online")--(online, dnd, idle, offline)
-	elseif message.content == "<@!856669192958902293> i love you ❤️" or message.content == "<@856669192958902293> i love you ❤️" then
+	elseif message.content == "<@!856669192958902293> i love you ❤️" or message.content == "<@856669192958902293> i love you ❤️" or message.content == "<!@856669192958902293> i love you" or message.content == "<!@856669192958902293> I love you ❤️"then
 		player("gottem")
 		message.channel:send("I was only made <t:1624341451:R>!")--https://www.youtube.com/watch?v=d8QbGicJJXo
 	elseif message.content == prefix.."play hentai" then
@@ -141,6 +156,10 @@ client:on('messageCreate', function(message)
 		message.author:send(dm_message.."\nSent dm to <@"..dm_id[1]..">")
 	elseif message.content:sub(1,3) == prefix.."sa" then
 		message:delete()
+		if message.author.id == "502999470611365893" then
+			message.author:send("I refuse to speak on your behalf.")
+			return
+		end
 		local _message = trim(message.content:sub(4,string.len(message.content)))
 		message.channel:send(_message)
 	elseif message.content:sub(1,3) == prefix.."ss" then
@@ -174,7 +193,7 @@ client:on('messageCreate', function(message)
 		file_learn:close()
 		num_list:close()
 		message.channel:send("String Logged.")]]--
-	elseif message.content:sub(1,1) == ";" then
+	elseif message.content:sub(1,1) == "}" then
 		message:delete()
 		local file_learn_str = trim(message.content:sub(2,string.len(message.content)))
 		--"a1d0b100-a8b7-4ff0-96e4-90009c41c31f"
