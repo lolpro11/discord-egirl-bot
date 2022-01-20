@@ -75,10 +75,7 @@ end
 
 client:on('messageCreate', function(message)
 	local prefix = '!'
-	local song_list = {"c", "f", "m", "d", "o", "h", "y", "op", "owo", "uwu", "why", "i", "hard", "hello", "pizza", "mask", "dive", "threat", "dream"}
-	--[[if message.author.id == "502999470611365893" then
-		return
-	end]]--
+	local song_list = {"c", "f", "m", "d", "o", "h", "r", "y", "op", "me", "owo", "uwu", "why", "i", "hard", "hello", "pizza", "mask", "dive", "threat", "dream"}
 	function player(song)
 		coroutine.wrap(function()
 			if message.member ~= nil then
@@ -91,6 +88,8 @@ client:on('messageCreate', function(message)
 						connection:playFFmpeg('lolprobot files/egirl_msgs/'..song..'.mp3')
 						if song == "f" and  type(connection) ~= "nil" then
                             connection:close()
+                        --elseif song == "m" then
+                            --message.channel:send("m")
                         end
 					end
 				end
@@ -98,8 +97,8 @@ client:on('messageCreate', function(message)
 		end)()
 	end
 	for i=1,#song_list do
-		if message.content == song_list[i] then
-			message:delete()
+		if message.content == song_list[i] and client:getChannel(message.member.voiceChannel) ~= nil and message.author.id ~= "766182068576976907" then
+    		message:delete()
 			player(song_list[i])
 		end
 	end
@@ -160,8 +159,24 @@ client:on('messageCreate', function(message)
 			message.author:send("I refuse to speak on your behalf.")
 			return
 		end
-		local _message = trim(message.content:sub(4,string.len(message.content)))
-		message.channel:send(_message)
+		message:delete()
+		local channel_id = split(trim(message.content:sub(4,string.len(message.content))))
+		local channel_message = trim(message.content:sub(4,string.len(message.content)))
+		--channel_id = {"701824288340180993", "e"}
+		if message.channel.guild:getChannel(channel_id[1]) == nil then
+			message.channel:send(channel_message)
+		else
+			if channel_id ~= nil then
+				channel_message = channel_id[2]
+				for i=3,#channel_id do
+					channel_message = channel_message.." "..channel_id[i]
+				end
+				local channel_get = message.channel.guild:getChannel(channel_id[1])
+				if channel_message ~= nil and channel_get ~= nil then
+					channel_get:send(channel_message)
+				end
+			end
+		end
 	elseif message.content:sub(1,3) == prefix.."ss" then
 		message:delete()
 		--if message.author.id == "873989176490623066" then
@@ -180,19 +195,6 @@ client:on('messageCreate', function(message)
 		else
 			message.channel:send("```Error: User is not in Sudoer's file.\nThis incident will be reported.```")
 		end
-	--[[elseif message.content:sub(1,1) == "'" then
-		local file_learn_str = trim(message.content:sub(2,string.len(message.content)))
-		--"a1d0b100-a8b7-4ff0-96e4-90009c41c31f"
-		local num_list = io.open("lolprobot files/egirl_msgs/list.txt", "r")
-		local added = num_list:read()
-		num_list:close()
-		local num_list = io.open("lolprobot files/egirl_msgs/list.txt", "w")
-		local file_learn = io.open("lolprobot files/egirl_msgs/"..tostring(added + 1)..".txt", "w")
-		num_list:write(added + 1)
-		file_learn:write(file_learn_str)
-		file_learn:close()
-		num_list:close()
-		message.channel:send("String Logged.")]]--
 	elseif message.content:sub(1,1) == "}" then
 		message:delete()
 		local file_learn_str = trim(message.content:sub(2,string.len(message.content)))
