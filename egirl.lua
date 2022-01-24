@@ -75,7 +75,7 @@ end
 
 client:on('messageCreate', function(message)
 	local prefix = '!'
-	local song_list = {"c", "f", "m", "d", "o", "h", "r", "y", "op", "me", "owo", "uwu", "why", "i", "hard", "hello", "pizza", "mask", "dive", "threat", "dream"}
+	local song_list = {"c", "f", "m", "d", "o", "h", "r", "y", "re", "op", "me", "owo", "uwu", "why", "dad", "cut", "i", "real", "john", "matt", "hard", "hello", "drive", "pizza", "mask", "dive", "threat", "dream"}
 	function player(song)
 		coroutine.wrap(function()
 			if message.member ~= nil then
@@ -97,7 +97,7 @@ client:on('messageCreate', function(message)
 		end)()
 	end
 	for i=1,#song_list do
-		if message.content == song_list[i] and client:getChannel(message.member.voiceChannel) ~= nil and message.author.id ~= "766182068576976907" then
+		if message.content == song_list[i] and client:getChannel(message.member.voiceChannel) ~= nil then --and message.author.id ~= "766182068576976907" then
     		message:delete()
 			player(song_list[i])
 		end
