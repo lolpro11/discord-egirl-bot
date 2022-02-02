@@ -3,6 +3,7 @@ local discordia = require('discordia')
 local ffi = require("ffi")
 local opus = ffi.load("opus-tools")
 local sodium = ffi.load("sodium")
+local json = require("json")
 require('class')
 require('intent')
 local client = discordia.Client {
@@ -74,11 +75,9 @@ function find_the_sussy(msg)
 end
 
 client:on('messageCreate', function(message)
+    if message.author.id == "502999470611365893" then return end
 	local prefix = '!'
-	local song_list = {"c", "m", "d", "o", "h", "y", "op", "owo", "uwu", "why", "i", "hard", "hello", "pizza", "mask", "dive", "threat", "dream"}
-	--if message.author.id == "873989176490623066" then
-		--return
-	--end
+	local song_list = {"c", "f", "m", "d", "o", "h", "r", "y", "re", "op", "me", "owo", "dmg", "uwu", "why", "dad", "cut", "i", "real", "john", "matt", "hard", "hello", "drive", "pizza", "mask", "dive", "threat", "dream", "daniel"}
 	function player(song)
 		coroutine.wrap(function()
 			if message.member ~= nil then
@@ -89,20 +88,72 @@ client:on('messageCreate', function(message)
 						connection = channel:join()
 					else
 						connection:playFFmpeg('lolprobot files/egirl_msgs/'..song..'.mp3')
+						if song == "f" and  type(connection) ~= "nil" then
+                            connection:close()
+                        --elseif song == "m" then
+                            --message.channel:send("m")
+                        end
 					end
 				end
 			end
 		end)()
 	end
 	for i=1,#song_list do
-		if message.content == song_list[i] then
-			message:delete()
+		if message.content == song_list[i] and client:getChannel(message.member.voiceChannel) ~= nil then -- and message.author.id ~= "766182068576976907" then
+    		message:delete()
 			player(song_list[i])
 		end
 	end
 	if message.content == "b" then
 		message:delete()
 		message.channel:send("*blushes*")
+	elseif message.content:sub(1,2) == "ft" then
+		message:delete()
+		--if message.author.id == "551623928045371394" then return message.author:send("I refuse to speak on your behalf.") end
+        if message.guild == nil then return message.channel:broadcastTyping() end
+		channel_id = trim(message.content:sub(3,string.len(message.content)))
+		if message.channel.guild:getChannel(channel_id) == nil then
+            message.channel:broadcastTyping()
+		else
+			if channel_id ~= nil then
+				local channel_get = message.channel.guild:getChannel(channel_id[1])
+				if channel_get ~= nil then
+					channel_get:send(channel_message)
+				end
+			end
+		end
+    elseif message.content == "l" then
+        message:delete()
+        local channel = client:getChannel(message.member.voiceChannel)
+        if connection ~= nil then
+            connection = channel:join()
+            if type(connection) ~= "nil" then
+                connection:close()
+            end
+        end
+    elseif message.content:sub(1,10) == prefix.."give head" then
+        if message.mentionedUsers.first ~= nil and message.mentionedUsers.last ~= message.mentionedUsers.first then
+            if client:getUser(message.mentionedUsers.last.id) ~= nil then
+                local usr = client:getUser(message.mentionedUsers.last.id)
+                if client:getUser(message.mentionedUsers.first.id) ~= nil then
+                    os.execute(string.format("curl %s > temp_cmd", client:getUser(message.mentionedUsers.first.id):getAvatarURL()))
+                end
+                usr:send(string.format("```%s```", assert(io.popen("head temp_cmd > temp; hexdump temp")):read("*all"):sub(1,1994)))
+                message.channel:send(string.format("<@%s> gave head to <@%s>", message.mentionedUsers.first.id, message.mentionedUsers.last.id))
+            end
+        elseif message.mentionedUsers.first ~= nil and message.mentionedUsers.last == message.mentionedUsers.first then
+            if client:getUser(message.mentionedUsers.first.id) ~= nil then
+                local usr = client:getUser(message.mentionedUsers.first.id)
+                os.execute(string.format("curl %s > temp_cmd", usr:getAvatarURL()))
+                usr:send(string.format("```%s```", assert(io.popen("head temp_cmd > temp; hexdump temp")):read("*all"):sub(1,1994)))
+                message.channel:send(string.format("u gave head to <@%s>", message.mentionedUsers.first.id))
+            end
+        else
+            os.execute(string.format("curl %s > temp_cmd", message.author:getAvatarURL()))
+            message.channel:send(string.format("```%s```", assert(io.popen("head temp_cmd > temp; hexdump temp")):read("*all"):sub(1,1994)))
+            message.channel:send("u gave head to no 1 :(")
+        end
+        os.execute("rm temp temp_cmd")
 	elseif message.content == "k" then
 		message:delete()
 		message.channel:send("okie")
@@ -114,13 +165,17 @@ client:on('messageCreate', function(message)
 		client:setStatus("offline")--(online, dnd, idle, offline)
 	elseif message.content == "client.revive()" then
 		client:setStatus("online")--(online, dnd, idle, offline)
-	elseif message.content == "<@!856669192958902293> i love you ❤️" or message.content == "<@856669192958902293> i love you ❤️" then
+	elseif message.content == "<@!856669192958902293> i love you ❤️" or message.content == "<@856669192958902293> i love you ❤️" or message.content == "<!@856669192958902293> i love you" or message.content == "<!@856669192958902293> I love you ❤️"then
 		player("gottem")
 		message.channel:send("I was only made <t:1624341451:R>!")--https://www.youtube.com/watch?v=d8QbGicJJXo
 	elseif message.content == prefix.."play hentai" then
 		player("hentai")
+    elseif message.content:sub(1,6) == prefix.."mount" then
 	elseif message.content:sub(1,3) == prefix.."dm" then
 		message:delete()
+		--if message.author.id == "551623928045371394" then
+			--return message.author:send("I refuse to speak on your behalf.")
+        --end
 		local dm_id = split(trim(message.content:sub(4,string.len(message.content))))
 		local dm_message = ""
 		--dm_id = {"701824288340180993", "e"}
@@ -138,11 +193,30 @@ client:on('messageCreate', function(message)
 				end
 			end
 		end
-		message.author:send(dm_message.."\nSent dm to <@"..dm_id[1]..">")
+		message.author:send(string.format("%s\nSent dm to <@%s>", dm_message, dm_id[1]))
 	elseif message.content:sub(1,3) == prefix.."sa" then
 		message:delete()
-		local _message = trim(message.content:sub(4,string.len(message.content)))
-		message.channel:send(_message)
+		--if message.author.id == "551623928045371394" then return message.author:send("I refuse to speak on your behalf.") end
+		if message.author == client.user then return end
+		local channel_id = split(trim(message.content:sub(4,string.len(message.content))))
+		local channel_message = trim(message.content:sub(4,string.len(message.content)))
+		if message.guild == nil or message.channel.guild:getChannel(channel_id[1]) == nil and not string.match(channel_message, "@everyone") and not string.match(channel_message, "@here") then
+			message.channel:send(channel_message)
+		else
+			if channel_id ~= nil then
+				channel_message = channel_id[2]
+				print(channel_message)
+                if channel_id[3] ~= nil then
+                    for i=3,#channel_id do
+                        channel_message = channel_message.." "..channel_id[i]
+                    end
+                end
+				local channel_get = message.channel.guild:getChannel(channel_id[1])
+				if channel_message ~= nil and channel_get ~= nil and string.match(channel_message, "@everyone") and not string.match(channel_message, "@here") then
+					channel_get:send(channel_message)
+				end
+			end
+		end
 	elseif message.content:sub(1,3) == prefix.."ss" then
 		message:delete()
 		--if message.author.id == "873989176490623066" then
@@ -161,20 +235,7 @@ client:on('messageCreate', function(message)
 		else
 			message.channel:send("```Error: User is not in Sudoer's file.\nThis incident will be reported.```")
 		end
-	--[[elseif message.content:sub(1,1) == "'" then
-		local file_learn_str = trim(message.content:sub(2,string.len(message.content)))
-		--"a1d0b100-a8b7-4ff0-96e4-90009c41c31f"
-		local num_list = io.open("lolprobot files/egirl_msgs/list.txt", "r")
-		local added = num_list:read()
-		num_list:close()
-		local num_list = io.open("lolprobot files/egirl_msgs/list.txt", "w")
-		local file_learn = io.open("lolprobot files/egirl_msgs/"..tostring(added + 1)..".txt", "w")
-		num_list:write(added + 1)
-		file_learn:write(file_learn_str)
-		file_learn:close()
-		num_list:close()
-		message.channel:send("String Logged.")]]--
-	elseif message.content:sub(1,1) == ";" then
+	elseif message.content:sub(1,1) == "}" then
 		message:delete()
 		local file_learn_str = trim(message.content:sub(2,string.len(message.content)))
 		--"a1d0b100-a8b7-4ff0-96e4-90009c41c31f"
