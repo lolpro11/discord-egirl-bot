@@ -1,2 +1,0 @@
-luvit egirl.lua
-@pause
